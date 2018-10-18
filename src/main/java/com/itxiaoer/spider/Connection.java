@@ -1,9 +1,6 @@
 package com.itxiaoer.spider;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -55,16 +52,27 @@ public class Connection {
 
 
     private String host() {
-        if (this.domain.startsWith("https://")) {
-            System.out.println("https "+domain);
-            return this.domain.replaceAll("https://", "");
+        if (this.getDomain().startsWith("https://")) {
+            return this.getDomain().replaceAll("https://", "");
         }
-        return this.domain.replaceAll("http://", "");
+        return this.getDomain().replaceAll("http://", "");
     }
 
 
     public String getDomain() {
-        return domain;
+        String host = "";
+        String prefix = "";
+        if (this.domain.startsWith("https://")) {
+            host = this.domain.replaceAll("https://", "");
+            prefix = "https://";
+        } else {
+            host = this.domain.replaceAll("http://", "");
+            prefix = "http://";
+        }
+        if (host.contains("/")) {
+            host = host.substring(0, host.indexOf("/"));
+        }
+        return prefix + host + "/";
     }
 
     public void setDomain(String domain) {

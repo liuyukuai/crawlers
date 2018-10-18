@@ -75,7 +75,6 @@ public class Spider {
 
     private String host(String domain) {
         if (domain.startsWith("https://")) {
-            System.out.println("https "+domain);
             domain = domain.replaceAll("https://", "");
         } else {
             domain = domain.replaceAll("http://", "");
@@ -90,7 +89,6 @@ public class Spider {
 
     private String subDomain(String domain) {
         if (domain.startsWith("https://")) {
-            System.out.println("https "+domain);
             domain = domain.replaceAll("https://", "");
         } else {
             domain = domain.replaceAll("http://", "");

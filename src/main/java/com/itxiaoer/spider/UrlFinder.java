@@ -1,12 +1,12 @@
 package com.itxiaoer.spider;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.BufferedReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,16 +56,18 @@ public class UrlFinder {
             this.URL_LIST.forEach(e -> {
                 int i1 = e.indexOf("href=");
                 int i2 = e.indexOf("</a>");
-                System.out.println(e + "-- " + i1 + "-" + i2);
-
-                String substring = e.substring(i1, i2).replace("href=", "");
-                if (substring.startsWith("\"")) {
-                    substring = substring.substring(1, substring.length());
+                String url = "";
+                if (i1 > 0 && i2 > 0) {
+                    String substring = e.substring(i1, i2).replace("href=", "");
+                    if (substring.startsWith("\"")) {
+                        substring = substring.substring(1, substring.length());
+                    }
+                    String[] split = substring.split(">");
+                    String url_1 = split[0];
+                    url = url_1.split(" ")[0];
+                } else {
+                    url = e;
                 }
-                String[] split = substring.split(">");
-                String url_1 = split[0];
-                String url = url_1.split(" ")[0];
-
 //                System.out.println("-----" + url);
                 if (url.contains("javascript") || url.startsWith("#")) {
                     return;
@@ -86,7 +88,15 @@ public class UrlFinder {
                     url = this.connection.getDomain() + "/" + url;
                 }
 
-                urls.add(url);
+                if (url.contains("'")) {
+                    String[] split = url.split("'");
+                    urls.add(split[0]);
+                    urls.add(split[1]);
+
+                } else {
+                    urls.add(url);
+                }
+
             });
         } catch (Exception e) {
             e.printStackTrace();
